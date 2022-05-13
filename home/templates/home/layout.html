@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- Bootstrap -->
+
+    <!-- Bootstrap Studio Imports -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Best Quality clothes sold here.">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="{% static 'assets/fonts/simple-line-icons.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="{% static 'assets/css/vanilla-zoom.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/my_css.css' %}">
+    <!-- Bootstrap Studio Imports -->
+
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <!-- Header Icon -->
+    <!-- <link rel="icon" href="{% static 'media/favicon.ico' %}" type="image/x-icon"> -->
+    <link rel="icon" href="{% static 'media/img/favicon/favicon.ico' %}" type="image/x-icon">
+    <!-- Header Icon -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <div class="container">
+            <a class="navbar-brand logo" href="{% url 'home:index' %}">
+                <img src="{% static 'assets/img/logo.png' %}" alt="" height="40" width="40">
+                <strong>Stop N Shop</strong>
+            </a>
+            <!-- <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span>
+            </button> -->
+            <!-- <div class="collapse navbar-collapse" id="navcol-1"> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                <div class="collapse navbar-collapse" id="navbar-list-4">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home:all' %}" style="color: rgba(0, 0, 0, 0.55);border-color: rgba(0, 0, 0, 0.55);border-top-color: rgba(0,;border-right-color: 0,;border-bottom-color: 0,;border-left-color: 0.55);font-weight: bold;">All</a></li>
+                    <li class="nav-item">
+                            <!-- <div class="btn-group dropdown" style="height: 42px;">
+                                <a class="btn btn-primary text-uppercase pl-0 py-0 pr-0" role="button" style="color: rgba(0, 0, 0, 0.55);background: transparent;height: 20.2px;font-size: 12.8px;border-radius: 0px;border-color: rgba(0,0,0,0.55);border-top-color: transparent;border-right-color: transparent;border-bottom-color: transparent;border-left-color: transparent;font-weight: bold;" href="{% url 'home:categories' %}">
+                                    <strong class="py-2">Categories</strong>
+                                </a>
+                                <button class="btn btn-primary dropdown-toggle dropdown-toggle-split pl-1 py-0 pr-0" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button" style="background: rgb(255,255,255);color: rgba(0,0,0,0.55);border-color: rgba(0,0,0,0);height: 32px;">
+                                    <span class="sr-only"></span>
+                                </button>
+                                <div class="dropdown-menu" style="height: auto1;">
+                                    {% for category in categories %}
+                                    <a class="dropdown-item" href="{% url 'home:category' category %}">{{ category }}</a>
+                                    {% endfor %}
+                                </div> -->
+                                <!-- <a class="dropdown-item" href="#">Jeans</a> -->
+                                <!-- <a class="dropdown-item" href="#">Shirts</a> -->
+                            <!-- </div> -->
+                        <!-- </a> -->
+
+                        <div class="btn-group">
+                            <a href="{% url 'home:categories' %}" class="btn pl-0 nav-link" style="color: rgba(0, 0, 0, 0.55);font-weight: bold;">Categories</a>
+                            <button type="button" style="color: rgba(0, 0, 0, 0.55);font-weight: bold;" class="btn dropdown-toggle dropdown-toggle-split nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                {% for category in categories %}
+                                <a class="dropdown-item" href="{% url 'home:category' category %}">{{ category }}</a>
+                                {% endfor %}
+                              <!-- <a class="dropdown-item" href="#">Another action</a>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="#">Separated link</a> -->
+                            </div>
+                          </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home:gallery' %}" style="color: rgba(0, 0, 0, 0.55);font-weight: bold;">Gallery</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'cart:index' %}" style="color: rgba(0, 0, 0, 0.55);font-weight: bold;">Cart
+                            {% if number_of_items_in_cart != 0 %}
+                            <span class="badge badge-info">{{ number_of_items_in_cart }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="{% url 'home:logout' %}" style="font-weight: bold;">Logout</a></li> -->
+                    <!-- <a class="nav-link" href="{% url 'users:index' %}" style="color: rgba(0, 0, 0, 0.55);font-weight: bold; text-decoration: none;">{{ user.username }}</a> -->
+                        <li class="nav-item">
+    
+                            <!-- CIRCULAR AVATAR 1 STARS -->
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle mb-1 py-0 pl-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {% if user.profile.image.url %}                                        
+                                        <img src="{{ user.profile.image.url }}" width="30" height="30" class="rounded-circle">
+                                        {% else %}
+                                        <img src="{% static 'assets/img/default_user_profile_image.jpg' %}" class="rounded-circle z-depth-0">
+                                        {% endif %}
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                      <a class="dropdown-item" href="{% url 'users:index' %}">Profile</a>
+                                      <a class="dropdown-item" href="{% url 'order:history' %}">Orders</a>
+                                      <a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a>
+                                    </div>
+                                  </li>   
+                                </ul>
+                            <!-- CIRCULAR AVATAR 1 ENDS -->
+                            <!-- CIRCULAR AVATAR 2 STARTS FAIL -->
+    
+                            <!-- <ul class="navbar-nav ml-auto nav-flex-icons">
+                                <li class="nav-item avatar dropdown">
+                                  <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    {% if user.userprofile.profile_picture.url %}
+                                    <img src="{{ user.userprofile.profile_picture.url }}" class="rounded-circle z-depth-0">
+                                    {% else %}
+                                    <img src="{% static 'assets/img/default_user_profile_image.jpg' %}" class="rounded-circle z-depth-0">
+                                    {% endif %}
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                  </div>
+                                </li>
+                            </ul> -->
+                            <!-- CIRCULAR AVATAR 2 ENDS -->
+                        </li>
+
+                        
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home:login' %}" style="font-weight: bold;">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home:signup' %}" style="font-weight: bold;">Sign Up</a></li>
+                    {% endif %}    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar -->
+</head>
+<body>
+    {% block body %}
+    {% endblock %}
+    <footer class="page-footer dark">
+        <div class="container">
+            <div class="row row-cols-3 text-center d-flex float-none justify-content-center">
+                <div class="col-sm-3">
+                    <h5 class="text-start">Get started</h5>
+                    <ul>
+                        <li class="text-start"><a href="{% url 'home:index' %}">Home</a></li>
+                        <li class="text-start"><a href="{% url 'home:signup' %}">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <h5 class="text-start">About us</h5>
+                    <ul>
+                        <li class="text-start"><a class="text-start" href="{% url 'home:companyinformation' %}">Company Information</a></li>
+                        <li class="text-start"><a href="{% url 'home:contactus' %}">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <h5 class="text-start">Legal</h5>
+                    <ul>
+                        <li class="text-start"><a href="#">Terms of Service</a></li>
+                        <li class="text-start"><a href="#">Terms of Use</a></li>
+                        <li class="text-start"><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2021 Copyright Badboystyle</p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="{% static 'assets/js/vanilla-zoom.js' %}"></script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+    <script src="{% static 'assets/js/my_js.js' %}"></script>
+    <script src="{% static 'assets/js/cart.js' %}"></script>
+    <script src="{% static 'assets/js/tinyInject.js' %}"></script>
+
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+</body>
+</html>

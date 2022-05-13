@@ -1,0 +1,120 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% block title %}
+Badboystyle|View Profile
+{% endblock %}
+
+{% block body %}
+<!-- <div class="mt-5">
+    <div class="pt-5">
+        <h1>This is the profile page for {{ user.username }}</h1>
+
+    </div>
+</div> -->
+<main class="page mt-5" style="min-height: 100%;">
+    <section class="clean-block about-us">
+        <div class="row" style="margin-right: 0px;margin-left: 0px;">
+            <div class="col text-center">
+                <h2 class="text-info">{{ user.username }}</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center" style="margin-right: 0px;margin-left: 0px;">
+            <div class="col-sm-6 col-lg-4" style="padding-right: 0px;padding-left: 0px;">
+                {% if user.profile.image.url %}
+                <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" style="max-height: fit-content;" src="{{ user.profile.image.url }}">
+                {% else %}
+                <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" style="max-height: fit-content;" src="{% static 'assets/img/default_user_profile_image.jpg' %}">
+                {% endif %}
+                    <div class="card-body info">
+                        <div class="row" style="margin-top: -24px;">
+                            <div class="col-md-12" style="margin-top: 22px;">
+                                {% if user.username %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Username</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.username }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user.first_name or user.last_name %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Name</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.first_name }} {{ user.last_name }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user.profile.phonenumber %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Contact</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.profile.phonenumber }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Email Id</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.email }}</p>
+                                    </div>
+                                </div>
+                                {% if user.profile.address %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Address</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.profile.address }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user.profile.address %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>State</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.profile.state }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user.profile.city %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>City</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.profile.city }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user.profile.zip_code %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="labels"><strong>Zip</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="labels">{{ user.profile.zip_code }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-md-12"><a class="btn btn-warning" role="button" href="{% url 'users:edit_profile' %}">Edit</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

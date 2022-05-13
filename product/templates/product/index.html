@@ -1,0 +1,298 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}
+Badboystyle|Product
+{% endblock %}
+
+{% block body %}
+<main class="page product-page">
+    <section class="clean-block clean-product dark">
+        <div class="container">
+            <div class="block-content">
+                <div class="product-info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="gallery">
+                                <div id="product-preview" class="vanilla-zoom">
+                                    <div class="zoomed-image"></div>
+                                    <div class="sidebar">
+                                        <!-- <img class="img-fluid d-block small-preview" src="{{ product.image.url }}">
+                                        {% if product.image2 %}
+                                        <img class="img-fluid d-block small-preview" src="{{ product.image2.url }}">
+                                        {% endif %}
+                                        {% if product.image3 %}
+                                        <img class="img-fluid d-block small-preview" src="{{ product.image3.url }}">
+                                        {% endif %} -->
+
+                                        {% if product.images %}                                        
+                                            {% for image in product.images.all %}
+                                            <img class="img-fluid d-block small-preview" src="{{ image.image.url }}">
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if product.variations %}                            
+                                            {% for variation in product.variations.all %}
+                                                {% if variation.image %}
+                                                    <img class="img-fluid d-block small-preview" src="{{ variation.image.url }}">
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info">
+                                <form action="{% url 'product:index' product.name %}" method="post">
+                                    {% csrf_token %}
+                                    <h3>{{ product.name }}</h3>
+                                    <!-- STAR RATING STARTS -->
+                                    <!-- <div class="rating"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star-half-empty.svg' %}"><img src="{% static 'assets/img/star-empty.svg' %}"></div> -->
+                                    <!-- STAR RATING ENDS -->
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="price">
+                                                {% if product.offer %}
+                                                <h6><strike>{{ product.variations.first.price }}₹</strike>  {{ product.offer.discount }} %OFF</h6>
+                                                {% with discounted_value=product.variations.first.price|mul:product.offer.discount|div:100 %}
+                                                <h3>{{ product.variations.first.price|sub:discounted_value }}₹</h3>
+                                                {% endwith %}
+                                                {% else %}
+                                                <h3>{{ product.variations.first.price }}₹</h3>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            {% if user.is_active and product.stock > 0 %}
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <button class="btn btn-primary btn-lg m-1" type="submit" href="{% url 'cart:index' %}">
+                                                        <i class="icon-basket col-6"></i>Add to Cart
+                                                    </button>
+                                                </div>
+                                                {% elif user.is_active and product.stock <= 0 %}
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <button class="btn btn-warning btn-lg m-1 disabled">
+                                                        Out of Stock
+                                                    </button>
+                                                {% else %}
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <a class="btn btn-primary btn-lg m-1" href="{% url 'home:login' %}">
+                                                        <i class="icon-basket col-6"></i>Add to cart
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <input type="text" name="cart_product" id="cart_product" value="{{ product.name }}" hidden>
+                                    
+                                    <div class="summary">
+                                        <div class="">
+                                            {% csrf_token %}
+                                            {% if product.variations.all|length > 0 %}
+                                            <!-- Variation Starts -->
+                                            {% if product.stock > 0 %}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="card-header">
+                                                        <h4>Available Variations</h4>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-nowrap overflow-auto">
+                                                    {% for variation in product.variations.all %}
+                                                    
+
+                                                        <div class="form-check">
+                                                            {% if variation.stock < 1 %}
+                                                            <input class="form-check-input" type="radio" name="variation" id="variation" value="{{ variation.generated_variation_id }}" disabled>
+                                                            {% else %}
+                                                            <input class="form-check-input" type="radio" name="variation" id="variation" value="{{ variation.generated_variation_id }}" required>
+                                                            {% endif %}
+                                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                                <div class="card card-block mx-2">
+                                                                    <div class="card-img-top" style="max-width: 100px;">
+                                                                        <!-- {% if variation.image.url %}
+                                                                        <img class="img-fluid d-block small-preview" src="{{ variation.image.url }}" alt="Variation Image Here" >
+                                                                        {% endif %} -->
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <h6>Size: {{ variation.size }}</h6>
+                                                                        <h6>Color: {{ variation.color }}</h6>
+                                                                        {% with discounted_value=variation.price|mul:product.offer.discount|div:100 %}
+                                                                        <h6>Price: {{ variation.price|sub:discounted_value|floatformat:2 }}₹</h6>
+                                                                        {% endwith %}
+                                                                        {% if variation.stock == 0 %}
+                                                                        <h6 class="text-danger">Out of Stock :(</h6>
+                                                                        {% else %}
+                                                                        <h6>Stock: {{ variation.stock }}</h6>
+                                                                        {% endif %}
+                                                                        <div class="row">
+                                                                            {% if user.is_active and variation.stock > 0 %}
+                                                                            <div class="col-12">
+                                                                                {% if product.product_of_item.quantity %}
+                                                                                <p class="form-group">Quantity:<input type="number" name='quantity' min="1" max="{{ variation.stock }}" placeholder="1" value="{{ product.product_of_item.quantity }}"></p>
+                                                                                {% else %}
+                                                                                <p class="form-group">Quantity:<input type="number" name='quantity' min="1" max="{{ variation.stock }}" placeholder="1" value="1"></p>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            {% endif %}                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
+                                                            
+
+                                                            {% if product.stock < 1 %}
+                                                            <h3>Check Our All Products <a href="{% url 'home:all' %}">Here</a></h3>
+                                                            {% endif %}
+
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <h4 class="font-weight-bold text-danger">Only {{ product.stock }} left in Stock!</h4>
+                                            {% endif %}
+                                            
+                                            {% endif %}   
+                                            {% if product.shop %}
+                                                <a href="{{ product.shop.website }}">{{ product.shop }}</a>
+                                            {% endif %}                                     
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" id="specifications-tabs" href="#specifications">Specifications</a></li>
+                            <!-- <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" id="description-tab" href="#description">Description</a></li> -->
+                            <!-- REVIEWS TAB BUTTON STARTS -->
+                            <!-- <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" id="reviews-tab" href="#reviews">Reviews</a></li> -->
+                            <!-- REVIEWS TAB BUTTON ENDS -->                        
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <!-- <div class="tab-pane fade show active description" role="tabpanel" id="description">
+                                {{ product.detail|safe }}
+                            </div> -->
+                            <div class="tab-pane fade specifications" role="tabpanel" id="specifications">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td class="stat">Variation Name</td>
+                                                {% for variation in product.variations.all %}
+                                                <td class="stat">{{ product.name }} {{ variation.color }} {{ variation.size }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Product dimension LxWxH</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.dimension_LxWxH }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Manufacturer name</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.manufacturer_name }}</td>
+                                                {% endfor %}
+
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Country of origin</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.country_of_origin }}</td>
+                                                {% endfor %}
+
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Department</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.department }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Manufacturer address</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.manufacturer_address }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Packer address</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.packer_address }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Item weight</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.item_weight }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Net Quantity</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.net_quantity }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Included Components</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.included_components }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                <td class="stat">Variation Id</td>
+                                                {% for variation in product.variations.all %}
+                                                <td>{{ variation.generated_variation_id }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                {% if related_products %}
+                <div class="clean-related-items">
+                    <h3>Related Products</h3>
+                    <div class="items">
+                        <div class="row justify-content-center">
+                            {% for a_product in related_products %}
+                            <div class="col-sm-6 col-lg-4" style="max-width: 300px;">
+                                <div class="clean-related-item">
+                                    <div class="image">
+                                        <a href="{% url 'product:index' a_product.name %}">
+                                            <img class="img-fluid d-block mx-auto" src="{{ a_product.image.url }}">
+                                        </a>
+                                    </div>
+                                    <div class="related-name">
+                                        <a href="{% url 'product:index' a_product.name %}">{{ a_product.name }}</a>
+                                        
+                                        <!-- STAR RATING STARTS -->
+                                        <!-- <div class="rating"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star.svg' %}"><img src="{% static 'assets/img/star-half-empty.svg' %}"><img src="{% static 'assets/img/star-empty.svg' %}"></div> -->
+                                        <!-- STAR RATING STARTS -->
+                                        {% with discounted_value=a_product.variations.first.price|mul:a_product.offer.discount|div:100 %}                                        
+                                        <h4>{{ a_product.variations.first.price|sub:discounted_value }}₹</h4>
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}

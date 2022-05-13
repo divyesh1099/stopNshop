@@ -1,0 +1,33 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+
+{% block title %}
+Badboystyle|Login
+{% endblock %}
+
+{% block body %}
+<main class="page login-page">
+    {% if error %}
+    <div class="container">
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    </div>
+    {% endif %}
+    <section class="clean-block clean-form dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">Log In</h2>
+                <p>Login to get an amazing day ahead !!!</p>
+            </div>
+            <form method="POST" action="{% url 'home:login' %}">
+                {% csrf_token %}
+                <div class="mb-3"><label class="form-label" for="username">Username</label><input class="form-control item" type="text" id="username" name="username"></div>
+                <div class="mb-3"><label class="form-label" for="password">Password</label><input class="form-control" type="password" id="password" name="password"></div>
+                <div class="mb-3">
+                    <!-- <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox"><label class="form-check-label" for="checkbox">Remember me</label></div> -->
+                </div><button class="btn btn-primary" type="submit">Log In</button>
+                <p class="m-1 p-1">Not Registered yet ? <a href="{% url 'home:signup' %}">Sign Up</a></p>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

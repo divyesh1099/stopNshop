@@ -1,0 +1,18 @@
+.mydivouter{
+	position:relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+.mydivoverlap{
+    position: relative;
+    z-index: 1;
+}
+.mybuttonoverlap{
+	position: absolute;
+    z-index: 2;
+    display: none;
+}
+.mydivouter:hover .mybuttonoverlap{ 
+	display:block;
+}

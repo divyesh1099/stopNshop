@@ -1,0 +1,59 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% block title %}
+Badboystyle|Contact Us
+{% endblock %}
+
+{% block body %}
+<main class="page contact-us-page">
+    {% if fail %}
+    <div class="alert alert-danger" role="alert">
+        {{ fail }}
+      </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success" role="alert">
+        {{ success }}
+      </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-lg-6 col-sm-12">
+            <div class="container m-1 p-1">
+                <!-- <div id="googlemap" style="width:100%; height:350px;"></div> -->
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <section class="clean-block clean-form dark">
+                <div class="container">
+                    <div class="block-heading">
+                        <h2 class="text-info">Contact Us</h2>
+                        <p>Any Queries ? We would love to help you out. You can even simply share your experience or reviews too. We totally appreciate that</p>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3"><label class="form-label" for="name">Name</label><input class="form-control" type="text" id="name" name="name" value="{{ user.first_name }} {{ user.last_name }}" required></div>
+                        <div class="mb-3"><label class="form-label" for="subject">Subject</label><input class="form-control" type="text" id="subject" name="subject" required></div>
+                        <div class="mb-3"><label class="form-label" for="email">Email</label><input class="form-control" type="email" id="email" name="email" value="{{ user.email }}" required></div>
+                        <div class="mb-3"><label class="form-label" for="message">Message</label><textarea class="form-control" id="message" name="message" placeholder="Your message here ..." required></textarea></div>
+                        <div class="mb-3"><button class="btn btn-primary" type="submit">Send</button></div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        // Google Maps setup
+        var googlemap = new google.maps.Map(
+            document.getElementById('googlemap'),
+            {
+                center: new google.maps.LatLng(44.5403, -78.5463),
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+        );
+    });
+</script>
+{% endblock %}

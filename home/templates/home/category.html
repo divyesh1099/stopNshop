@@ -1,0 +1,115 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}
+Badboystyle|Category-{{ category.name }}
+{% endblock %}
+
+{% block body %}
+<main class="page service-page">
+    <section class="clean-block clean-services dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">{{ category.name }}</h2>
+                <p>{{ category.description }}</p>
+            </div>
+            <div class="row card-columns d-flex justify-content-center">
+                {% for product in products %}
+                <!-- <div class="col-md-6 col-lg-4"> -->
+                    <div class="card" style="width:300px;">
+                        <img class="card-img-top d-block" src="{{ product.images.first.image.url }}">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ product.name }}</h4>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    {% if product.offer %}
+                                    {% with discounted_value=product.variations.first.price|mul:product.offer.discount|div:100 %}
+                                        <h3 class="font-weight-bold">{{ product.variations.first.price|sub:discounted_value }}₹</h3>   
+                                    {% endwith %}
+                                    {% else %}
+                                    <h3 class="font-weight-bold">{{ product.variations.first.price }}₹</h3>
+                                    {% endif %}
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <h4>{{ product.offer.discount }}% OFF</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'product:index' product.name %}">Learn More</a></div>
+                    </div>
+                <!-- </div> -->
+                {% endfor %}
+                <!-- <div class="col-md-6 col-lg-4">
+                    <div class="card"><img class="card-img-top w-100 d-block" src="assets/img/scenery/image6.jpg">
+                        <div class="card-body">
+                            <h4 class="card-title">Lorem Ipsum</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in.</p>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="product.html">Learn More</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card"><img class="card-img-top w-100 d-block" src="assets/img/scenery/image1.jpg">
+                        <div class="card-body">
+                            <h4 class="card-title">Lorem Ipsum</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in.</p>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="product.html">Learn More</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card"><img class="card-img-top w-100 d-block" src="assets/img/scenery/image1.jpg">
+                        <div class="card-body">
+                            <h4 class="card-title">Lorem Ipsum</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in.</p>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="product.html">Learn More</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card"><img class="card-img-top w-100 d-block" src="assets/img/scenery/image5.jpg">
+                        <div class="card-body">
+                            <h4 class="card-title">Lorem Ipsum</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in.</p>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="product.html">Learn More</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card"><img class="card-img-top w-100 d-block" src="assets/img/scenery/image6.jpg">
+                        <div class="card-body">
+                            <h4 class="card-title">Lorem Ipsum</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in.</p>
+                        </div>
+                        <div><a class="btn btn-outline-primary btn-sm" role="button" href="product.html">Learn More</a></div>
+                    </div>
+                </div> -->
+
+                
+            </div>
+            <!-- Pagination starts -->
+            <nav class="d-flex justify-content-center">                                
+                <div class="pagination">
+                    <ul class="pagination">
+                        {% if products.has_previous %}
+                        <li class="page-item disabled"><a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                        {% endif %}
+                        {% for pg in products.paginator.page_range %}
+                            {% if products.number == pg %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                        <li class="page-item disabled"><a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+            <!-- Pagination ends -->
+        </div>
+    </section>
+</main>
+
+{% endblock %}

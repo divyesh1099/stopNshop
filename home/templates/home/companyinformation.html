@@ -1,0 +1,31 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+
+{% block title %}
+Badboystyle|Company Information
+{% endblock %}
+
+{% block body %}
+<main class="page">
+    <section class="clean-block about-us">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">About Us</h2>
+                <p>One of the best selling and active shops in Koparkhairane</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card text-center clean-card"><img class="card-img-top w-100 d-block" src="{% static 'assets/img/badboystyle.png' %}">
+                        <div class="card-body info">
+                            <h4 class="card-title">Badboy Style</h4>
+                            <p class="card-text">Best Boys Cloth Shop</p>
+                            <div class="icons"><a href="#"><i class="icon-social-facebook"></i></a><a href="#"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}

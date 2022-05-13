@@ -1,0 +1,24 @@
+{% extends 'home/layout.html' %}
+
+{% block title %}
+Badboystyle|Payment Success
+{% endblock %}
+
+{% block body %}
+<main class="page mt-5 mb-5">
+  <section>
+    <div class="container mt-5 mb-5 d-flex justify-content-center">
+      <div class="card text-center text-white bg-success mb-3" style="max-width: 50rem;">
+        <div class="card-body ">
+          <h3 class="card-title">Order Successfull !!!</h3>
+          <i class="icon-check display-1"></i>
+          <p class="card-text">Congratulations ! Your order is placed Successfully</p>
+        </div>
+        <div class="card-footer">
+          <a class="btn btn-warning text-center" href="{% url 'order:history' %}">Check All Orders</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

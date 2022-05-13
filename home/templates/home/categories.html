@@ -1,0 +1,72 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+
+{% block title %}
+Badboystyle|Categories
+{% endblock %}
+
+{% block body %}
+<main class="page blog-post-list">
+    <section class="clean-block clean-blog-list dark">
+        <div class="container">
+            <div class="block-heading" style="border-top-color: rgba(33,37,41,0);border-right-color: transparent;border-left-color: rgba(33,37,41,0);">
+                <h2 class="text-info">Categories</h2>
+                <p>Checkout our awesome collection of categories</p>
+            </div>
+            <div class="block-content">
+                {% for category in categories %}
+                <div class="clean-blog-post">
+                    <div class="row">   
+                        <div class="col-lg-5 ml-auto"><img class="rounded myImage" src="{{ category.image.url }}"></div>
+                        <div class="col-lg-7">
+                            <h3>{{ category.name }}</h3>
+                            <p>{{ category.description }}</p><a href="{% url 'home:category' category.name %}"><button class="btn btn-outline-primary btn-sm" type="button">See All</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- <div class="clean-blog-post">
+                    <div class="row">
+                        <div class="col-lg-5"><img class="rounded img-fluid" src="{% static 'assets/img/tech/image4.jpg' %}"></div>
+                        <div class="col-lg-7">
+                            <h3>Lorem Ipsum dolor sit amet</h3>
+                            <div class="info"><span class="text-muted">Jan 16, 2018 by&nbsp;<a href="#">John Smith</a></span></div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-primary btn-sm" type="button">Read More</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="clean-blog-post">
+                    <div class="row">
+                        <div class="col-lg-5"><img class="rounded img-fluid" src="{% static 'assets/img/tech/image4.jpg' %}"></div>
+                        <div class="col-lg-7">
+                            <h3>Lorem Ipsum dolor sit amet</h3>
+                            <div class="info"><span class="text-muted">Jan 16, 2018 by&nbsp;<a href="#">John Smith</a></span></div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-primary btn-sm" type="button">Read More</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="clean-blog-post">
+                    <div class="row">
+                        <div class="col-lg-5"><img class="rounded img-fluid" src="{% static 'assets/img/tech/image4.jpg' %}"></div>
+                        <div class="col-lg-7">
+                            <h3>Lorem Ipsum dolor sit amet</h3>
+                            <div class="info"><span class="text-muted">Jan 16, 2018 by&nbsp;<a href="#">John Smith</a></span></div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-primary btn-sm" type="button">Read More</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="clean-blog-post">
+                    <div class="row">
+                        <div class="col-lg-5"><img class="rounded img-fluid" src="{% static 'assets/img/tech/image4.jpg' %}"></div>
+                        <div class="col-lg-7">
+                            <h3>Lorem Ipsum dolor sit amet</h3>
+                            <div class="info"><span class="text-muted">Jan 16, 2018 by&nbsp;<a href="#">John Smith</a></span></div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-primary btn-sm" type="button">Read More</button>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

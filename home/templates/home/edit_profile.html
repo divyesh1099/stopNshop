@@ -1,0 +1,138 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% block title %}
+Badboystyle|Edit Profile
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper" class="mt-5">
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Profile</h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                {% if user.userprofile.profile_picture.url %}
+                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{ user.userprofile.profile_picture.url }}" width="160" height="160">
+                                {% else %}
+                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{% static 'assets/img/default_user_profile_image.jpg' %}" width="160" height="160">
+                                    <!-- <div class="mb-3 btn btn-info btn-sm"><a href="{% url 'home:editprofilepic' %}" >Change Picture</a></div> -->
+                                    <a class="col-lg-3 m-2 btn btn-warning btn-md" href="{% url 'home:editprofilepic' %}">Change Picture</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <!-- <div class="row mb-3 d-none">
+                                <div class="col">
+                                    <div class="card textwhite bg-primary text-white shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card textwhite bg-success text-white shadow">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <p class="m-0">Peformance</p>
+                                                    <p class="m-0"><strong>65.2%</strong></p>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                            </div>
+                                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">User Settings</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="username"><strong>Username</strong></label><input class="form-control" type="text" id="username" value="{{ user.username }}" placeholder="user.name" name="username"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" value="{{ user.email }}" placeholder="user@example.com" name="email"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="first_name"><strong>First Name</strong></label><input class="form-control" type="text" id="first_name" value="{{ user.first_name }}" placeholder="John" name="first_name"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" id="last_name" value="{{ user.last_name }}" placeholder="Doe" name="last_name"></div>
+                                                    </div>
+                                                <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label><input class="form-control" type="text" id="address" value="{{ user.userprofile.address }}" placeholder="Sunset Blvd, 38" name="address"></div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label><input class="form-control" type="text" id="city" value="{{ user.userprofile.city }}" placeholder="Navi Mumbai" name="city"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label><input class="form-control" type="text" id="country" value="{{ user.userprofile.country }}" placeholder="India" name="country"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="gender"><strong>Gender</strong></label>
+                                                            <!-- <input class="form-control" type="text" id="gender" placeholder="F" name="gender"> -->
+                                                            <select id="gender" name="gender" class="form-control">
+                                                                <option value="female">Female</option>
+                                                                <option value="male">Male</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="phonenumber"><strong>Phone Number</strong></label><input class="form-control" type="text" id="phonenumber" placeholder="0000000000" name="phonenumber" value="{{ user.userprofile.contact }}"></div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div class="row mb-3 justify-content-between">                                                    
+                                                    <button class="col-lg-3 m-2 btn btn-success btn-md" type="submit">Save Settings</button>
+                                                    <a class="col-lg-3 m-2 btn btn-danger btn-md" href="{% url 'home:editprofilepassword' %}">Change Password</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="card shadow">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold">Contact Settings</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label><input class="form-control" type="text" id="address" placeholder="Sunset Blvd, 38" name="address"></div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label><input class="form-control" type="text" id="city" placeholder="Los Angeles" name="city"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label><input class="form-control" type="text" id="country" placeholder="USA" name="country"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button></div>
+                                            </form>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

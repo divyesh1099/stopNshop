@@ -1,0 +1,146 @@
+{% extends 'home/layout.html' %}
+{% load mathfilters %}
+{% block title %}
+Badboystyle|Order History
+{% endblock %}
+
+{% block body %}
+<main class="page mt-5 mb-5">
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10 col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="font-weight-bold">Order History</h2>
+                        </div>
+                        <div class="card-body">
+                        {% if orders.count > 0 %}
+                        {% for order in orders %}
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row-lg-12">
+                                            <h5 class="pt-2">Ordered on <b>{{ order.date }} {{ order.time }}</b></h5>
+                                        </div>
+                                        <div class="row-lg-12">
+                                            <div class="col-lg-6">
+                                                <p>Order Total: <b>{{ order.amount }}₹</b></p>
+                                            </div>
+                                            {% if order.paid %}
+                                            <div class="col-lg-6">
+                                                <p>Paid: <i class="icon-check"></i></p>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-7 pt-2">
+                                                <p><b>Order Id:</b> {{ order.generated_order_id }}</p>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                {% if not order.cancelled %}
+                                                <a data-toggle = "modal" data-target = "#cancelModal{{ order.generated_order_id }}" class="m-1 row btn btn-sm btn-warning"><i class="icon-trash">Cancel Order</i></a>
+                                                {% else %}
+                                                <a class="m-1 row btn btn-sm btn-secondary">Cancelled</i></a>
+                                                {% endif %}
+                                                <a data-toggle = "modal" data-target = "#deleteModal{{ order.generated_order_id }}" class="m-1 row btn btn-sm btn-danger"><i class="icon-trash">Delete Order History</i></a>
+                                                
+                                                <!-- Cancel Modal Starts -->
+                                                <div class="modal fade" id="cancelModal{{ order.generated_order_id }}" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel{{ order.generated_order_id }}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <h5 class="modal-title" id="cancelModalLabel{{ order.generated_order_id }}">Confirm Cancel Order</h5>
+                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to cancel this order ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                          <a href="{% url 'order:cancel' order.generated_order_id %}" class="btn btn-danger">Confirm Cancel</a>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Cancel Modal Ends -->
+
+                                                <!-- Delete Order History Modal Starts -->
+                                                <div class="modal fade" id="deleteModal{{ order.generated_order_id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ order.generated_order_id }}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <h5 class="modal-title" id="deleteModalLabel{{ order.generated_order_id }}">Confirm Delete</h5>
+                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Deleting this order will <strong>NOT CANCEL</strong> this order, it will just not be visible in your history. And you will <strong>NOT BE ABLE TO CANCEL OR GET UPDATES</strong> of this order</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                          <a href="{% url 'order:delete' order.generated_order_id %}" class="btn btn-danger">Delete</a>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                <!-- Delete Order History Modal Ends -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                                    {% for product in order.products.all %}
+                                    <div class="card card-block mx-2" style="min-width: 280px; max-width: 280px;">
+                                        <img class="card-img-top img-thumbnail" src="{{ product.images.first.image.url }}" alt="">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-5 col-sm-12">
+                                                    {% if product.offer %}
+                                                        {% with discounted_value=product.variations.first.price|mul:product.offer.discount|div:100 %}
+                                                        <h5>{{ product.variations.first.price|sub:discounted_value }}₹</h5>
+                                                        {% endwith %}
+                                                    {% else %}
+                                                    <h5>{{ product.variations.first.price }}₹</h5>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-lg-7 col-sm-12">
+                                                        <p><strike>{{ product.variations.first.price }}₹</strike> {{ product.offer.discount }}% OFF</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer font-weight-bold d-flex justify-content-center">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <a href="{% url 'product:index' product.name %}" >{{ product.name }}</a>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+                                    </div>                             
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <h1>No Orders Yet</h1>
+                        <a href="{% url 'home:all' %}" class="btn btn-lg btn-primary">All Products</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

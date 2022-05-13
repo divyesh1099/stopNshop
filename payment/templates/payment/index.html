@@ -1,0 +1,172 @@
+{% extends 'home/layout.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}
+Badboystyle|Payment
+{% endblock %}
+
+{% block body %}
+<main class="page mt-5">
+    <section>
+        <!-- Confirm order starts -->
+        <div class="col-2"></div>
+        <div class="container col-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <h1 class="font-weight-bold col-lg-6 col-sm-12">Payment Details</h1>
+                        <p class="col col-lg-6 col-sm-12 d-flex justify-content-end justify-content-center mb-0 pt-3"><span class="font-weight-bold">Order id: </span> {{ order.generated_order_id }}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% for item in items %}
+                    <div class="row">
+                        <div class="col-lg-8 col-sm-12">
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                  <div class="col-md-4">
+                                    <img src="{{ item.variation.image.url }}" class="img-fluid rounded-start " alt="...">
+                                  </div>
+                                  <div class="col-md-8">
+                                    <div class="card-body">
+                                      <h5 class="card-title font-weight-bold">{{ item.name }}</h5>
+                                      <p class="card-text">{{ item.name.description|truncatewords:10 }}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <h3>Quantity: {{ item.quantity }}</h3>
+                            {% if item.color %}
+                            <h3>Color: {{ item.color }}</h3>
+                            {% endif %}
+                            {% with total_price=item.price|mul:item.quantity discounted_value=item.price|mul:item.name.offer.discount|mul:item.quantity|div:100 %}
+                            <h3>Price: {{ total_price|sub:discounted_value|floatformat:2 }}₹</h3>
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="card col-lg-6 col-sm-12">
+                                            <div class="card-header">
+                                                <h4 class="card-title font-weight-bold">
+                                                    Address
+                                                </h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>{{ order.address }}, {{ order.city }}, {{ order.state }}, {{ order.zip }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="card col-lg-6 col-sm-12">
+                                            <div class="card-header">
+                                                <h4 class="card-title font-weight-bold">
+                                                    Contact Number
+                                                </h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>{{ order.phonenumber }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <h5 class="font-weight-bold">Address</h5>
+                                    <p>{{ order.address }}, {{ order.city }}, {{ order.state }}, {{ order.zip }}</p>
+                                    <hr> -->
+                                    <!-- <h5 class="font-weight-bold">Contact Number</h5>
+                                    <p>{{ order.phonenumber }}</p>
+                                    <hr> -->
+                                    <!-- <div class=""> -->
+                                        <h3 class="font-weight-bold d-flex justify-content-end">Total</h3>
+                                        <h1 class="d-flex justify-content-end font-weight-bold text-success">{{ order.amount }}₹</h1>
+                                        <small class="d-flex justify-content-end font-weight-bold">(including shipping and taxes*)</small>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6 d-flex justify-content-center">
+                            <!-- BUTTON 1 STARTS -->
+                            <form class="col-lg-12 col-sm-12" action="{% url 'payment:payment_success' order.generated_order_id %}" method="post">
+                                {% csrf_token %}
+                                <script
+                                    src="https://checkout.razorpay.com/v1/checkout.js"
+                                    data-key="rzp_test_C3J7evdYwRoSAs" 
+                                    data-amount="{{ total_in_paise }}" 
+                                    data-currency="INR"
+                                    data-buttontext="Pay Now"
+                                    data-name="Badboy Style"
+                                    data-description="Order Number {{ order.generated_order_id }}"
+                                    data-image="{% static 'assets/img/logo.png' %}"
+                                    data-prefill.name="{{ user.first_name }} {{ user.last_name }}"
+                                    data-prefill.email="{{ user.email }}"
+                                    data-prefill.contact="{{ user.profile.phonenumber }}"
+                                >
+                            </script>
+                                <input type="hidden" custom="Hidden Element" name="hidden">
+                            </form>
+                            <!-- BUTTON 1 ENDS -->
+
+                            <!-- BUTTON 2 STARTS -->
+                            <!-- <button id="rzp-button1" class="btn btn-primary btn-lg d-block w-100" type="submit">Confirm and Pay</button>
+                            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                            <script>
+                            var options = {
+                                "key": "rzp_test_C3J7evdYwRoSAs", // Enter the Key ID generated from the Dashboard
+                                "amount": "{{ total_in_paise }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                "currency": "INR",
+                                "name": "Order",
+                                "description": "Test Order",
+                                "image": "{% static 'assets/img/logo.png' %}",
+                                // "order_id": "{{ order.generated_order_id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 2
+                                "handler": function (response){
+                                    alert(response.razorpay_payment_id);
+                                    // alert(response.razorpay_order_id);
+                                    alert(response.razorpay_signature);
+
+                                },
+                                "prefill": {
+                                    "name": "{{ user.first_name }} {{ user.last_name }}",
+                                    "email": "{{ user.email }}",
+                                    "address": "{{ "
+                                },
+                                "notes": {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                "theme": {
+                                    "color": "#FFD700"
+                                }
+                            };
+                            var rzp1 = new Razorpay(options);
+                            rzp1.on('payment.failed', function (response){
+                                    alert(response.error.code);
+                                    alert(response.error.description);
+                                    alert(response.error.source);
+                                    alert(response.error.step);
+                                    alert(response.error.reason);
+                                    alert(response.error.metadata.order_id);
+                                    alert(response.error.metadata.payment_id);
+                            });
+                            document.getElementById('rzp-button1').onclick = function(e){
+                                rzp1.open();
+                                e.preventDefault();
+                            }
+                            </script> -->
+                            <!-- BUTTON 2 ENDS -->
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+        <!-- Confirm order ends -->
+    </section>
+
+</main>
+{% endblock %}
